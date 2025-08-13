@@ -1,0 +1,387 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     13987,        379]
+NotebookOptionsPosition[     13397,        361]
+NotebookOutlinePosition[     13800,        377]
+CellTagsIndexPosition[     13757,        374]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[StyleBox["Direct, unconstrained estimates of tetrad classes \
+(Er) based on the observed crossover classes.",
+ FontSize->18,
+ FontWeight->"Bold",
+ FontColor->RGBColor[0., 0., 0.6274509803921569]]], "Subtitle",
+ CellChangeTimes->{
+  3.9640332587913113`*^9, {3.9640367168516655`*^9, 
+   3.964036722623728*^9}},ExpressionUUID->"3afb14cb-f5df-2f4c-b147-\
+14e128072a26"],
+
+Cell[TextData[{
+ StyleBox["Analytical estimates of Er (r,  number of crossovers in a tetrad) \
+based on the observed number of crossover (CO) classes and using Weinstein\
+\[CloseCurlyQuote]s eqs. (1936), modified to allow for meiotic drive (B) \
+during meiosis II based on different number of  crossovers between sister \
+chromatids, following Pettie et al. (2022). B (0 \[LessSlantEqual] B \
+\[LessSlantEqual] 1)  indicates the probability of a chromatid with more \
+crossovers that its sister to be included into the oocyte. B = 0.5 is \
+equivalent to Weinstein\[CloseCurlyQuote]s model (random segregation). B > \
+0.5 (B < 0.5) allows preferential inclusion into oocytes of chromatids with \
+more (fewer) crossovers relative to their sister chromatid.\n\nNote that this \
+model can generate values outside biologically feasible 0 \[LessSlantEqual] \
+Er \[LessSlantEqual] 1,",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[" ",
+  FontSize->12,
+  FontSlant->"Italic",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["suggesting the model\[CloseCurlyQuote]s underlying conditions are \
+not met, leading to unreliable parameter estimates for all Er.\n\n",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["Citations:",
+  FontSize->12,
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["\n- Weinstein, A. 1936. ",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["The theory of multiple-strand crossing over",
+  FontSize->12,
+  FontSlant->"Italic",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[". Genetics 21:155\[Dash]199\n- Pettie, N., et al. 2022. ",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["Meiotic, genomic and evolutionary properties of crossover \
+distribution in Drosophila yakuba",
+  FontSize->12,
+  FontSlant->"Italic",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[". PLOS Genetics 8(3):e1010087.",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["doi:",
+  FontSize->12,
+  FontVariations->{"Underline"->True},
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[ButtonBox["10.1371/journal.pgen.1010087",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://journals.plos.org/plosgenetics/article/info%3Adoi%2F10.1371%\
+2Fjournal.pgen.1002905"], None},
+  ButtonNote->
+   "https://journals.plos.org/plosgenetics/article/info%3Adoi%2F10.1371%\
+2Fjournal.pgen.1002905"],
+  FontSize->12,
+  FontVariations->{"Underline"->True},
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["\n- Llopart et a. 2025. ",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["A high-resolution crossover landscape in Drosophila santomea \
+reveals rapid and concerted evolution of multiple properties of crossing-over \
+control",
+  FontSize->12,
+  FontSlant->"Italic",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[". PLOS Genetics",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]]
+}], "Subsubtitle",
+ CellChangeTimes->{
+  3.9640332527102966`*^9},ExpressionUUID->"4cd1f10e-b4e1-e14e-945f-\
+5af142cb5f4f"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"===", " ", 
+    RowBox[{"INPUT", " ", "data", " ", "below"}], " ", "==="}], "*)"}], 
+  "\[IndentingNewLine]", 
+  StyleBox[
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Observed", " ", "number", " ", "of", " ", "crossover", " ", "classes", " ", 
+     RowBox[{"(", 
+      RowBox[{"NCO", ",", " ", 
+       RowBox[{
+        RowBox[{"no", " ", "crossovers"}], ";", " ", "CO1"}], ",", " ", 
+       RowBox[{
+        RowBox[{"1", " ", "crossover"}], ";", " ", "CO2"}], ",", " ", 
+       RowBox[{
+        RowBox[{"2", " ", "crossovers"}], "..."}]}], ")"}]}], "*)"}],
+   FontSize->10], 
+  StyleBox[" ",
+   FontSize->10], 
+  StyleBox[
+   RowBox[{"(*", " ", 
+    RowBox[{"B", ":", " ", 
+     RowBox[{
+     "bias", " ", "during", " ", "segregation", " ", "of", " ", "sister", " ",
+       "chromatids", " ", "towards", " ", "the", " ", "oocyte", " ", "based", 
+      " ", "on", " ", "different", " ", "number", " ", "of", " ", 
+      "crossovers", " ", 
+      RowBox[{"(", 
+       RowBox[{"0.5", ",", " ", 
+        RowBox[{"indicates", " ", "random", " ", "segregation"}], ",", " ", 
+        RowBox[{"B", " ", ">", " ", 
+         RowBox[{
+         "0.5", " ", "bias", " ", "favoring", " ", "more", " ", 
+          "crossovers"}]}], ",", 
+        RowBox[{"B", " ", "<", " ", 
+         RowBox[{
+         "0.5", " ", "bias", " ", "favoring", " ", "fewer", " ", 
+          "crossovers"}]}]}], ")"}]}]}], " ", "*)"}],
+   FontSize->10], 
+  StyleBox["\[IndentingNewLine]",
+   FontSize->10], 
+  RowBox[{
+   StyleBox[
+    StyleBox[
+     RowBox[{"(", "*"}]],
+    FontSize->10], 
+   StyleBox[" ",
+    FontSize->10], 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      StyleBox["Examples",
+       FontSize->10], 
+      StyleBox[":",
+       FontSize->10], 
+      StyleBox[" ",
+       FontSize->10], 
+      StyleBox["\[IndentingNewLine]",
+       FontSize->10], "NCO"}], "=", "295"}], ";", " ", 
+    RowBox[{"CO1", "=", "258"}], ";", " ", 
+    RowBox[{"CO2", "=", "34"}], ";", " ", 
+    RowBox[{"CO3", "=", "1"}], ";", " ", 
+    RowBox[{"CO4", "=", "0"}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"D", ".", "melanogaster"}], " ", "Autosomes"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"NCO", "=", "1015"}], ";", " ", 
+    RowBox[{"CO1", "=", "1013"}], ";", " ", 
+    RowBox[{"CO2", "=", "256"}], ";", " ", 
+    RowBox[{"CO3", "=", "32"}], ";", " ", 
+    RowBox[{"CO4", "=", "0"}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"D", ".", "santomea"}], " ", "Autosomes"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"NCO", "=", "2212"}], ";", " ", 
+    RowBox[{"CO1", "=", "2318"}], ";", " ", 
+    RowBox[{"CO2", "=", "432"}], ";", " ", 
+    RowBox[{"CO3", "=", "34"}], ";", " ", 
+    RowBox[{"CO4", "=", "1"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"D", ".", "yakuba"}], " ", "Autosomes"}], "*)"}], 
+   "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"NCO", "=", "2212"}], ";", " ", 
+    RowBox[{"CO1", "=", "2318"}], ";", " ", 
+    RowBox[{"CO2", "=", "432"}], ";", " ", 
+    RowBox[{"CO3", "=", "34"}], ";", " ", 
+    RowBox[{"CO4", "=", "1"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"B", "=", "0.5"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", 
+     RowBox[{"===", " ", 
+      RowBox[{"Variables", " ", "and", " ", "Equation", " ", "System"}], " ", 
+      "==="}], "*)"}],
+    FontSize->10], 
+   StyleBox["\[IndentingNewLine]",
+    FontSize->10], 
+   RowBox[{
+    RowBox[{"observed", "=", 
+     RowBox[{"{", 
+      RowBox[{"NCO", ",", "CO1", ",", "CO2", ",", "CO3", ",", "CO4"}], 
+      "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"T", "=", 
+     RowBox[{"Total", "[", "observed", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"eqns", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"E0", "+", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", "-", "B"}], ")"}], " ", "E1"}], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", "B"}], ")"}], " ", "E2"}], "+", 
+         RowBox[{
+          FractionBox["1", "4"], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", "B"}], ")"}], " ", "E3"}], "+", 
+         RowBox[{
+          FractionBox["1", "8"], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", "B"}], ")"}], "E4"}]}], "==", 
+        RowBox[{"NCO", "/", "T"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"B", " ", "E1"}], "+", 
+         RowBox[{
+          FractionBox["1", "2"], " ", "E2"}], "+", 
+         RowBox[{
+          FractionBox["3", "4"], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", "B"}], ")"}], " ", "E3"}], "+", 
+         RowBox[{
+          FractionBox["4", "8"], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", "B"}], ")"}], "E4"}]}], "==", 
+        RowBox[{"CO1", "/", "T"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          FractionBox["1", "2"], "B", " ", "E2"}], "+", 
+         RowBox[{
+          FractionBox["3", "4"], " ", "B", " ", "E3"}], "+", 
+         RowBox[{
+          FractionBox["3", "8"], " ", "E4"}]}], "==", 
+        RowBox[{"CO2", "/", "T"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          FractionBox["1", "4"], " ", "B", " ", "E3"}], "+", 
+         RowBox[{
+          FractionBox["1", "2"], " ", "B", " ", "E4"}]}], "==", 
+        RowBox[{"CO3", "/", "T"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         FractionBox["1", "8"], " ", "B", " ", "E4"}], "==", 
+        RowBox[{"CO4", "/", "T"}]}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"results", "=", 
+     RowBox[{"NSolve", "[", "eqns", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", 
+     RowBox[{"===", " ", 
+      RowBox[{"Prepare", " ", "for", " ", "print", " ", "and", " ", "print"}],
+       " ", "==="}], "*)"}],
+    FontSize->10], "\[IndentingNewLine]", 
+   RowBox[{"Style", "[", 
+    RowBox[{"\"\<\\nUnrestricted Estimates of Tetrad Classes (Er):\>\"", ",", 
+     "Bold", ",", "Red"}], "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RedIfNegative", "[", "rules_", "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"MyRules", ",", 
+         RowBox[{"IsNegative", "=", "False"}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"MyRules", "=", 
+         RowBox[{"rules", "/.", " ", 
+          RowBox[{
+           RowBox[{"Rule", "[", 
+            RowBox[{"var_", ",", "val_"}], "]"}], ":>", 
+           RowBox[{"Module", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"num", "=", 
+               RowBox[{"N", "[", "val", "]"}]}], "}"}], ",", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{"num", "<", "0"}], ",", 
+               RowBox[{
+                RowBox[{"IsNegative", "=", "True"}], ";", 
+                "\[IndentingNewLine]", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"Row", "[", 
+                   RowBox[{"{", 
+                    RowBox[{"var", ",", "\"\< -> \>\"", ",", 
+                    RowBox[{"NumberForm", "[", 
+                    RowBox[{"num", ",", 
+                    RowBox[{"{", 
+                    RowBox[{"Infinity", ",", "3"}], "}"}]}], "]"}]}], "}"}], 
+                   "]"}], ",", "Red"}], "]"}]}], ",", 
+               RowBox[{"Row", "[", 
+                RowBox[{"{", 
+                 RowBox[{"var", ",", "\"\< -> \>\"", ",", 
+                  RowBox[{"NumberForm", "[", 
+                   RowBox[{"num", ",", 
+                    RowBox[{"{", 
+                    RowBox[{"Infinity", ",", "3"}], "}"}]}], "]"}]}], "}"}], 
+                "]"}]}], "]"}]}], "]"}]}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{"IsNegative", ",", 
+          RowBox[{"Column", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Column", "[", "MyRules", "]"}], ",", 
+             RowBox[{"Style", "[", 
+              
+              RowBox[{"\"\<Warning: At least one E value is negative, leading \
+to unrelaible estimates for all Er. Consider using the code that allows \
+finding the best set of Er given some rules (1\[GreaterSlantEqual]Er\
+\[GreaterSlantEqual]0)\>\"", ",", "Red", ",", "Bold"}], "]"}]}], "}"}], "]"}],
+           ",", 
+          RowBox[{"Column", "[", "MyRules", "]"}]}], "]"}]}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Column", "[", 
+    RowBox[{"RedIfNegative", "/@", "results"}], "]"}], " ", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Beep", "[", "]"}], " ", 
+    RowBox[{"Quit", "[", "]"}]}], "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.964033354557579*^9, 3.964033373154436*^9}, {
+   3.9640334516867943`*^9, 3.964033454182871*^9}, {3.9640335769704742`*^9, 
+   3.9640335811501007`*^9}, {3.9640346696565647`*^9, 3.9640346724692974`*^9}, 
+   3.964038281839649*^9},ExpressionUUID->"ed29d25e-571a-3244-b3fa-\
+bc6a7de16751"]
+}, Open  ]]
+},
+WindowSize->{950.25, 522.75},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"14.2 for Microsoft Windows (64-bit) (March 14, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"b5b25904-7264-094e-9ae2-992a6683003b"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 379, 8, 44, "Subtitle",ExpressionUUID->"3afb14cb-f5df-2f4c-b147-14e128072a26"],
+Cell[958, 32, 3217, 75, 218, "Subsubtitle",ExpressionUUID->"4cd1f10e-b4e1-e14e-945f-5af142cb5f4f"],
+Cell[4178, 109, 9203, 249, 825, "Input",ExpressionUUID->"ed29d25e-571a-3244-b3fa-bc6a7de16751"]
+}, Open  ]]
+}
+]
+*)
+

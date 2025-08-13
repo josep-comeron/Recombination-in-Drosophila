@@ -1,0 +1,488 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     18670,        480]
+NotebookOptionsPosition[     18078,        462]
+NotebookOutlinePosition[     18481,        478]
+CellTagsIndexPosition[     18438,        475]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[StyleBox["Estimates of best combination of tetrad classes (Er) \
+based on numerical optimization, allowing restrictions for Er.",
+ FontSize->18,
+ FontWeight->"Bold",
+ FontColor->RGBColor[0., 0., 0.6274509803921569]]], "Subtitle",
+ CellChangeTimes->{
+  3.9640332587913113`*^9, {3.9640349129426937`*^9, 3.9640349143681965`*^9}, {
+   3.964036570929119*^9, 3.96403657321319*^9}, {3.9640367495228977`*^9, 
+   3.964036749531208*^9}},ExpressionUUID->"3afb14cb-f5df-2f4c-b147-\
+14e128072a26"],
+
+Cell[TextData[{
+ StyleBox["Numerical optimization to estimate the best combination of Er (r,  \
+number of crossovers in a tetrad), based on minimizing the difference between \
+predicted and observed crossover classes (Chi-Sq test). The code allows \
+identifying the best set of biologically feasible values for Er (restricting \
+Er to the [0,1] range) and directly generate the probability to fit the \
+observed crossover classes (sometimes, the \[OpenCurlyQuote]best fit\
+\[CloseCurlyQuote] is not very good). It is based on Weinstein\
+\[CloseCurlyQuote]s equations (1936) modified to allow for meiotic drive (B) \
+during meiosis II based on different number of  crossovers between sister \
+chromatids, following Pettie et al. (2022). B (0 \[LessSlantEqual] B \
+\[LessSlantEqual] 1)  indicates the probability of a chromatid with more \
+crossovers that its sister to be included into the oocyte. B = 0.5 is \
+equivalent to Weinstein\[CloseCurlyQuote]s model (random segregation). B > \
+0.5 (B < 0.5) allows preferential inclusion into oocytes of chromatids with \
+more (fewer) crossovers relative to their sister chromatid. \n\n",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["Citations:",
+  FontSize->12,
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["\n- Weinstein, A. 1936. ",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["The theory of multiple-strand crossing over",
+  FontSize->12,
+  FontSlant->"Italic",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[". Genetics 21:155\[Dash]199\n- Pettie, N., et al. 2022. ",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["Meiotic, genomic and evolutionary properties of crossover \
+distribution in Drosophila yakuba",
+  FontSize->12,
+  FontSlant->"Italic",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[". PLOS Genetics 8(3):e1010087.",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["doi:",
+  FontSize->12,
+  FontVariations->{"Underline"->True},
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[ButtonBox["10.1371/journal.pgen.1010087",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://journals.plos.org/plosgenetics/article/info%3Adoi%2F10.1371%\
+2Fjournal.pgen.1002905"], None},
+  ButtonNote->
+   "https://journals.plos.org/plosgenetics/article/info%3Adoi%2F10.1371%\
+2Fjournal.pgen.1002905"],
+  FontSize->12,
+  FontVariations->{"Underline"->True},
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["\n- Llopart et a. 2025. ",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox["A high-resolution crossover landscape in Drosophila santomea \
+reveals rapid and concerted evolution of multiple properties of crossing-over \
+control",
+  FontSize->12,
+  FontSlant->"Italic",
+  FontColor->RGBColor[0., 0., 0.6274509803921569]],
+ StyleBox[". PLOS Genetics",
+  FontSize->12,
+  FontColor->RGBColor[0., 0., 0.6274509803921569]]
+}], "Subsubtitle",
+ CellChangeTimes->{3.9640332527102966`*^9, 
+  3.964034923858368*^9},ExpressionUUID->"4cd1f10e-b4e1-e14e-945f-\
+5af142cb5f4f"],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"(*", 
+    RowBox[{"===", " ", 
+     RowBox[{"INPUT", " ", "data", " ", "below"}], " ", "==="}], "*)"}],
+   FontColor->RGBColor[1, 0, 0]], 
+  StyleBox["\[IndentingNewLine]",
+   FontColor->RGBColor[1, 0, 0]], 
+  StyleBox[
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Observed", " ", "number", " ", "of", " ", "crossover", " ", "classes", " ", 
+     RowBox[{"(", 
+      RowBox[{"NCO", ",", " ", 
+       RowBox[{
+        RowBox[{"no", " ", "crossovers"}], ";", " ", "CO1"}], ",", " ", 
+       RowBox[{
+        RowBox[{"1", " ", "crossover"}], ";", " ", "CO2"}], ",", " ", 
+       RowBox[{
+        RowBox[{"2", " ", "crossovers"}], "..."}]}], ")"}]}], "*)"}],
+   FontSize->10], 
+  StyleBox[" ",
+   FontSize->10], 
+  StyleBox["\[IndentingNewLine]",
+   FontSize->10], 
+  StyleBox[
+   RowBox[{"(*", " ", 
+    RowBox[{"B", ",", " ", 
+     RowBox[{
+     "bias", " ", "during", " ", "segregation", " ", "of", " ", "sister", " ",
+       "chromatids", " ", "towards", " ", "the", " ", "oocyte", " ", "based", 
+      " ", "on", " ", "different", " ", "number", " ", "of", " ", 
+      "crossovers"}]}], " ", "*)"}],
+   FontSize->10], 
+  StyleBox["\[IndentingNewLine]",
+   FontSize->10], 
+  RowBox[{
+   StyleBox[
+    StyleBox[
+     RowBox[{"(", "*"}]],
+    FontSize->10], 
+   StyleBox[" ",
+    FontSize->10], 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      StyleBox["Examples",
+       FontSize->10], 
+      StyleBox[":",
+       FontSize->10], 
+      StyleBox[" ",
+       FontSize->10], 
+      StyleBox["\[IndentingNewLine]",
+       FontSize->10], "NCO"}], "=", "295"}], ";", " ", 
+    RowBox[{"CO1", "=", "258"}], ";", " ", 
+    RowBox[{"CO2", "=", "34"}], ";", " ", 
+    RowBox[{"CO3", "=", "1"}], ";", " ", 
+    RowBox[{"CO4", "=", "0"}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"D", ".", "melanogaster"}], " ", "Autosomes"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"NCO", "=", "1015"}], ";", " ", 
+    RowBox[{"CO1", "=", "1013"}], ";", " ", 
+    RowBox[{"CO2", "=", "256"}], ";", " ", 
+    RowBox[{"CO3", "=", "32"}], ";", " ", 
+    RowBox[{"CO4", "=", "0"}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"D", ".", "santomea"}], " ", "Autosomes"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"NCO", "=", "2212"}], ";", " ", 
+    RowBox[{"CO1", "=", "2318"}], ";", " ", 
+    RowBox[{"CO2", "=", "432"}], ";", " ", 
+    RowBox[{"CO3", "=", "34"}], ";", " ", 
+    RowBox[{"CO4", "=", "1"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"D", ".", "yakuba"}], " ", "Autosomes"}], "*)"}], 
+   "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"NCO", "=", "2212"}], ";", " ", 
+    RowBox[{"CO1", "=", "2318"}], ";", " ", 
+    RowBox[{"CO2", "=", "432"}], ";", " ", 
+    RowBox[{"CO3", "=", "34"}], ";", " ", 
+    RowBox[{"CO4", "=", "1"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"B", "=", "0.5"}], ";"}], "\[IndentingNewLine]", 
+   StyleBox["\[IndentingNewLine]",
+    FontSize->10], 
+   StyleBox[
+    RowBox[{
+     StyleBox[
+      RowBox[{"(", 
+       StyleBox["*",
+        FontSize->10]}]], 
+     StyleBox[
+      RowBox[{
+       RowBox[{"===", " ", "Options"}], ",", " ", 
+       RowBox[{
+        RowBox[{"Variables", " ", "and", " ", "Equation", " ", "System"}], 
+        " ", "==="}]}],
+      FontSize->10], 
+     StyleBox["*)",
+      FontSize->10]}],
+    FontColor->RGBColor[1., 0., 0.]], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"SetOptions", "[", 
+     RowBox[{
+      RowBox[{"EvaluationNotebook", "[", "]"}], ",", 
+      RowBox[{"WorkingPrecision", "->", "50"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"observed", "=", 
+     RowBox[{"{", 
+      RowBox[{"NCO", ",", "CO1", ",", "CO2", ",", "CO3", ",", "CO4"}], 
+      "}"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"T", "=", 
+     RowBox[{"Total", "[", "observed", "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"PredictedCounts", "[", 
+      RowBox[{"{", 
+       RowBox[{"E0_", ",", "E1_", ",", "E2_", ",", "E3_", ",", "E4_"}], "}"}],
+       "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "eqs", "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"T", "*", 
+          RowBox[{"(", 
+           RowBox[{"E0", "+", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"1", "-", "B"}], ")"}], " ", "E1"}], "+", 
+            RowBox[{
+             RowBox[{"1", "/", "2"}], " ", 
+             RowBox[{"(", 
+              RowBox[{"1", "-", "B"}], ")"}], " ", "E2"}], "+", 
+            RowBox[{
+             RowBox[{"1", "/", "4"}], " ", 
+             RowBox[{"(", 
+              RowBox[{"1", "-", "B"}], ")"}], " ", "E3"}], "+", 
+            RowBox[{
+             RowBox[{"1", "/", "8"}], " ", 
+             RowBox[{"(", 
+              RowBox[{"1", "-", "B"}], ")"}], " ", "E4"}]}], ")"}]}], ",", 
+         RowBox[{"T", "*", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"B", " ", "E1"}], "+", 
+            RowBox[{
+             RowBox[{"1", "/", "2"}], " ", "E2"}], "+", 
+            RowBox[{
+             RowBox[{"3", "/", "4"}], " ", 
+             RowBox[{"(", 
+              RowBox[{"1", "-", "B"}], ")"}], " ", "E3"}], "+", 
+            RowBox[{
+             RowBox[{"4", "/", "8"}], " ", 
+             RowBox[{"(", 
+              RowBox[{"1", "-", "B"}], ")"}], " ", "E4"}]}], ")"}]}], ",", 
+         RowBox[{"T", "*", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"1", "/", "2"}], " ", "B", " ", "E2"}], "+", 
+            RowBox[{
+             RowBox[{"3", "/", "4"}], " ", "B", " ", "E3"}], "+", 
+            RowBox[{
+             RowBox[{"3", "/", "8"}], " ", "E4"}]}], ")"}]}], ",", 
+         RowBox[{"T", "*", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"1", "/", "4"}], " ", "B", " ", "E3"}], "+", 
+            RowBox[{
+             RowBox[{"1", "/", "2"}], " ", "B", " ", "E4"}]}], ")"}]}], ",", 
+         RowBox[{"T", "*", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"1", "/", "8"}], " ", "B", " ", "E4"}], ")"}]}]}], 
+        "}"}]}], "]"}]}], ";", 
+    RowBox[{
+     RowBox[{"ChiSq", "[", 
+      RowBox[{"{", 
+       RowBox[{"E0_", ",", "E1_", ",", "E2_", ",", "E3_", ",", "E4_"}], "}"}],
+       "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"expected", ",", "ValidValues"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"expected", "=", 
+         RowBox[{"PredictedCounts", "[", 
+          RowBox[{"{", 
+           RowBox[{"E0", ",", "E1", ",", "E2", ",", "E3", ",", "E4"}], "}"}], 
+          "]"}]}], ";", 
+        RowBox[{"ValidValues", "=", 
+         RowBox[{"Select", "[", 
+          RowBox[{
+           RowBox[{"Transpose", "[", 
+            RowBox[{"{", 
+             RowBox[{"observed", ",", "expected"}], "}"}], "]"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], ">", "0"}], "&"}]}], " ", 
+          "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Total", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"Abs", "[", 
+                RowBox[{
+                 RowBox[{"#", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], "-", 
+                 RowBox[{"#", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}]}], "]"}], "-", "0.5"}], 
+              ")"}], "^", "2"}], "/", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], "&"}], "/@", "ValidValues"}], 
+         "]"}]}]}], "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"BestChiSq", "=", 
+     RowBox[{"NMinimize", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"ChiSq", "[", 
+          RowBox[{"{", 
+           RowBox[{"E0", ",", "E1", ",", "E2", ",", "E3", ",", "E4"}], "}"}], 
+          "]"}], ",", 
+         RowBox[{"1", ">=", "E0", ">=", "0"}], ",", 
+         RowBox[{"1", ">=", "E1", ">=", "0"}], ",", 
+         RowBox[{"1", ">=", "E2", ">=", "0"}], ",", 
+         RowBox[{"1", ">=", "E3", ">=", "0"}], ",", 
+         RowBox[{"1", ">=", "E4", ">=", "0"}], ",", 
+         RowBox[{
+          RowBox[{"E0", "+", "E1", "+", "E2", "+", "E3", "+", "E4"}], "==", 
+          "1"}], ",", " ", 
+         RowBox[{"E4", "<=", "E3"}], ",", " ", 
+         RowBox[{"E4", "<=", "E2"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"E0", ",", "E1", ",", "E2", ",", "E3", ",", "E4"}], "}"}], ",", 
+       RowBox[{"Method", "->", "Automatic"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Prob", "=", 
+     RowBox[{"N", "[", 
+      RowBox[{"1", "-", 
+       RowBox[{"CDF", "[", 
+        RowBox[{
+         RowBox[{"ChiSquareDistribution", "[", "4", "]"}], ",", 
+         RowBox[{"SetPrecision", "[", 
+          RowBox[{
+           RowBox[{"BestChiSq", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], ",", "50"}], "]"}]}], "]"}]}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{"===", 
+      RowBox[{"=", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+         "Prepare", " ", "best", " ", "set", " ", "Er", " ", "and", " ", 
+          "Print"}], " ", "==="}], "="}]}]}], " ", "*)"}],
+    FontSize->10], "\[IndentingNewLine]", 
+   RowBox[{"Style", "[", 
+    RowBox[{"\"\<Estimates of Tetrad Classes (Er):\>\"", ",", "Bold", ",", 
+     "Red"}], "]"}], "\[IndentingNewLine]", 
+   RowBox[{"Column", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"NumberForm", "[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"#", "/.", " ", 
+          RowBox[{
+           RowBox[{"Rule", "[", 
+            RowBox[{"var_", ",", "val_"}], "]"}], ":>", 
+           RowBox[{"Rule", "[", 
+            RowBox[{"var", ",", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"Abs", "[", "val", "]"}], "<", 
+                RowBox[{"1", "*", 
+                 RowBox[{"10", "^", 
+                  RowBox[{"-", "5"}]}]}]}], ",", "0", ",", "val"}], "]"}]}], 
+            "]"}]}]}], ")"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"Infinity", ",", "4"}], "}"}]}], "]"}], "&"}], "/@", 
+     RowBox[{"BestChiSq", "[", 
+      RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Probability to fit observed data:\>\"", 
+      ",", "\"\<\\nChi-Sq= \>\"", ",", 
+      RowBox[{"NumberForm", "[", 
+       RowBox[{
+        RowBox[{"BestChiSq", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"Infinity", ",", "4"}], "}"}]}], "]"}], 
+      ",", "\"\<   Prob = \>\"", ",", 
+      RowBox[{"NumberForm", "[", 
+       RowBox[{"Prob", ",", 
+        RowBox[{"{", 
+         RowBox[{"Infinity", ",", "4"}], "}"}]}], "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Beep", "[", "]"}], ";", 
+    RowBox[{"Quit", "[", "]"}]}], "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.9618600921307964`*^9, 3.9618601301556377`*^9}, {
+   3.9618601617439575`*^9, 3.961860198404028*^9}, {3.9618605623780727`*^9, 
+   3.9618605864171677`*^9}, {3.96186065167992*^9, 3.961860741291334*^9}, {
+   3.9618607962953224`*^9, 3.9618607966091557`*^9}, {3.9618608322343445`*^9, 
+   3.961860833242876*^9}, {3.9618608657429028`*^9, 3.961860882154787*^9}, {
+   3.961860933145151*^9, 3.9618609423848457`*^9}, {3.9618696339990025`*^9, 
+   3.961869660520178*^9}, {3.96186970088962*^9, 3.961869715911907*^9}, {
+   3.9618697666927185`*^9, 3.9618699089204254`*^9}, {3.961869940625139*^9, 
+   3.9618699584991474`*^9}, {3.9629861860651016`*^9, 
+   3.9629862126953335`*^9}, {3.9630879074417458`*^9, 
+   3.9630879110474224`*^9}, {3.9630880023278008`*^9, 3.963088051357065*^9}, {
+   3.963088089189972*^9, 3.963088090829178*^9}, {3.96308821447983*^9, 
+   3.9630882203507576`*^9}, {3.9630882866997204`*^9, 
+   3.9630883453821144`*^9}, {3.9630883873375893`*^9, 
+   3.9630883896145897`*^9}, {3.9630886908040237`*^9, 
+   3.9630887100437756`*^9}, {3.9630887908034*^9, 3.963088792209938*^9}, {
+   3.9630891095938854`*^9, 3.963089110919319*^9}, {3.963090156401844*^9, 
+   3.963090170769493*^9}, {3.9630902494330273`*^9, 3.9630902754324493`*^9}, {
+   3.9630903129309177`*^9, 3.9630903461067276`*^9}, {3.9630910641189365`*^9, 
+   3.9630911016595287`*^9}, {3.9630911391980095`*^9, 
+   3.9630911700600624`*^9}, {3.963501034395136*^9, 3.9635010608621063`*^9}, {
+   3.963501096094061*^9, 3.9635011183158264`*^9}, {3.9635013303516674`*^9, 
+   3.9635013315244713`*^9}, {3.963501862649067*^9, 3.963501863616482*^9}, {
+   3.9635149923838444`*^9, 3.963515019550291*^9}, {3.963515068130863*^9, 
+   3.963515145014164*^9}, {3.9635152024544373`*^9, 3.963515272361849*^9}, {
+   3.963515310217537*^9, 3.9635153109608097`*^9}, {3.963515369114071*^9, 
+   3.9635153956868267`*^9}, {3.963515437272623*^9, 3.963515472280657*^9}, {
+   3.9639289547518272`*^9, 3.963928959854841*^9}, {3.9639289949517384`*^9, 
+   3.963928996016884*^9}, {3.9639309332463684`*^9, 3.9639309904470215`*^9}, {
+   3.9639310230721493`*^9, 3.9639310299542484`*^9}, {3.9639311053109207`*^9, 
+   3.963931173021803*^9}, 3.963931204755987*^9, {3.9639323325276413`*^9, 
+   3.9639323706447678`*^9}, {3.963932676197901*^9, 3.963932692619774*^9}, {
+   3.9639327835687637`*^9, 3.963932899267828*^9}, {3.9639329392267513`*^9, 
+   3.9639329491739426`*^9}, {3.9639330594473495`*^9, 3.963933131379566*^9}, {
+   3.963933203559494*^9, 3.963933219725008*^9}, {3.9639333597467403`*^9, 
+   3.963933457207506*^9}, 3.964038306939213*^9},
+ CellLabel->"In[1]:=",ExpressionUUID->"2a77de38-b1fc-8e47-9fbb-cc98d91190e6"]
+}, Open  ]]
+},
+WindowSize->{950.25, 522.75},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"14.2 for Microsoft Windows (64-bit) (March 14, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"9ccbf413-0c64-994f-b399-2f8bf6a522a5"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 498, 9, 68, "Subtitle",ExpressionUUID->"3afb14cb-f5df-2f4c-b147-14e128072a26"],
+Cell[1077, 33, 3170, 70, 202, "Subsubtitle",ExpressionUUID->"4cd1f10e-b4e1-e14e-945f-5af142cb5f4f"],
+Cell[4250, 105, 13812, 354, 675, "Input",ExpressionUUID->"2a77de38-b1fc-8e47-9fbb-cc98d91190e6"]
+}, Open  ]]
+}
+]
+*)
+

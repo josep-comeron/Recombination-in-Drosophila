@@ -3,36 +3,44 @@
 (*** Wolfram Notebook File ***)
 (* http://www.wolfram.com/nb *)
 
-(* CreatedBy='Wolfram 14.1' *)
+(* CreatedBy='Wolfram 14.2' *)
 
 (*CacheID: 234*)
 (* Internal cache information:
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     18692,        459]
-NotebookOptionsPosition[     18139,        441]
-NotebookOutlinePosition[     18637,        460]
-CellTagsIndexPosition[     18594,        457]
+NotebookDataLength[     19368,        513]
+NotebookOptionsPosition[     18755,        494]
+NotebookOutlinePosition[     19180,        511]
+CellTagsIndexPosition[     19137,        508]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[StyleBox["Direct, unconstrained estimates of tetrad classes \
+(Er) across a range of B values (plot and table).",
+ FontSize->18,
+ FontWeight->"Bold",
+ FontColor->RGBColor[0., 0., 0.6274509803921569]]], "Subtitle",
+ CellChangeTimes->{3.9640332587913113`*^9, 3.9640336700507164`*^9, 
+  3.964036695527874*^9},ExpressionUUID->"3afb14cb-f5df-2f4c-b147-\
+14e128072a26"],
+
 Cell[TextData[{
- StyleBox["Direct  unconstrained estimates of tetrad classes (Er) across a \
-range of B values (plot and table).\n",
-  FontWeight->"Bold",
-  FontColor->RGBColor[0., 0., 0.6274509803921569]],
- StyleBox["Analytical estimates of Er (r,  number of crossovers in a tetrad) \
-based on the observed number of crossover (CO) classes based on Weinstein\
+ StyleBox["AAnalytical estimates of Er (r,  number of crossovers in a tetrad) \
+based on the observed number of crossover (CO) classes and using Weinstein\
 \[CloseCurlyQuote]s eqs. (1936), modified to allow for meiotic drive (B) \
 during meiosis II based on different number of \ncrossovers between sister \
 chromatids, following Pettie et al. (2022). B (0 \[LessSlantEqual] B \
 \[LessSlantEqual] 1)  indicates the probability of a chromatid with more \
 crossovers that its sister to be included into the oocyte. B = 0.5 is \
-equivalent to Weinstein\[CloseCurlyQuote]s model. B > 0.5 (B < 0.5) allows \
-preferential inclusion into oocytes of chromatids with more (fewer) \
-crossovers relative to their sister chromatid. \n\nNote that this model can \
+equivalent to Weinstein\[CloseCurlyQuote]s model (random segregation). B > \
+0.5 (B < 0.5) allows preferential inclusion into oocytes of chromatids with \
+more (fewer) crossovers relative to their sister chromatid. \n\nThe code \
+allows estimating Er across a range of B values. Note that this model can \
 generate values outside biologically feasible 0 \[LessSlantEqual] Er \
 \[LessSlantEqual] 1,",
   FontSize->12,
@@ -44,8 +52,8 @@ generate values outside biologically feasible 0 \[LessSlantEqual] Er \
  StyleBox["suggesting the model\[CloseCurlyQuote]s underlying conditions are \
 not met, leading to unreliable parameter estimates for all Er. The results of \
 this analysis can be used to identify the range of B values that generate \
-biologically feasible Er values (1 \[LessSlantEqual] Er \[LessSlantEqual] 0) \
-based on the observed crossover classes.\n\n",
+biologically feasible Er values (when all 1 \[LessSlantEqual] Er \
+\[LessSlantEqual] 0) based on the observed crossover classes.\n\n",
   FontSize->12,
   FontColor->RGBColor[0., 0., 0.6274509803921569]],
  StyleBox["Citations:",
@@ -97,35 +105,10 @@ control",
  StyleBox[". PLOS Genetics",
   FontSize->12,
   FontColor->RGBColor[0., 0., 0.6274509803921569]]
-}], "Text",
- CellChangeTimes->{
-  3.9599814528806553`*^9, {3.95998148938076*^9, 3.9599815134225883`*^9}, {
-   3.9600178760465965`*^9, 3.9600179558710327`*^9}, {3.960025270825926*^9, 
-   3.9600252713882713`*^9}, {3.9600255229945793`*^9, 3.960025546257576*^9}, {
-   3.960203321568844*^9, 3.960203366453436*^9}, {3.9602043568249207`*^9, 
-   3.9602043602349434`*^9}, {3.9606550250040855`*^9, 3.960655033558403*^9}, {
-   3.961169284626066*^9, 3.9611693360801067`*^9}, {3.961169640744505*^9, 
-   3.961169664207987*^9}, {3.9613568459484367`*^9, 3.961356894603857*^9}, {
-   3.9613569626896515`*^9, 3.9613571477298183`*^9}, {3.9613572427822304`*^9, 
-   3.961357288348871*^9}, {3.9613643627548046`*^9, 3.96136436453438*^9}, {
-   3.961364410774908*^9, 3.961364412192518*^9}, {3.9613646724261227`*^9, 
-   3.961364731851122*^9}, {3.961364780442833*^9, 3.9613647889586945`*^9}, {
-   3.962977382004122*^9, 3.962977382960142*^9}, 3.9629774214174957`*^9, {
-   3.96297751804204*^9, 3.962977595071188*^9}, {3.9629776281301994`*^9, 
-   3.962977687239065*^9}, {3.962977741079506*^9, 3.9629779144489155`*^9}, {
-   3.962977969660513*^9, 3.962978043002886*^9}, {3.9629782244277687`*^9, 
-   3.9629782274222717`*^9}, {3.9629782609497776`*^9, 3.962978292752836*^9}, 
-   3.9629783626992607`*^9, {3.9629795480947495`*^9, 3.962979556415884*^9}, {
-   3.9629798032679024`*^9, 3.962979803582634*^9}, {3.9629801640270824`*^9, 
-   3.9629801807150536`*^9}, {3.962980211969452*^9, 3.9629802130607014`*^9}, 
-   3.9630744362534084`*^9, {3.9635053093991985`*^9, 3.963505310446327*^9}, {
-   3.963505345236313*^9, 3.963505412358492*^9}, {3.963505446663624*^9, 
-   3.9635054807091045`*^9}, {3.963763474871519*^9, 3.9637635053733807`*^9}, {
-   3.9637676387528954`*^9, 3.9637676414669285`*^9}, {3.963767673154711*^9, 
-   3.963767673456896*^9}, {3.9637679593894424`*^9, 3.9637679669405766`*^9}, {
-   3.963768250999958*^9, 3.9637682510019608`*^9}, {3.963768452772377*^9, 
-   3.963768467904585*^9}},ExpressionUUID->"3cd4e7d6-86f7-874a-9418-\
-aedcd74bc7da"],
+}], "Subsubtitle",
+ CellChangeTimes->{3.9640332527102966`*^9, 
+  3.964033690601309*^9},ExpressionUUID->"4cd1f10e-b4e1-e14e-945f-\
+5af142cb5f4f"],
 
 Cell[BoxData[
  RowBox[{
@@ -135,7 +118,7 @@ Cell[BoxData[
      RowBox[{"INPUT", " ", "data", " ", "below"}], " ", "==="}], "*)"}],
    FontColor->RGBColor[1, 0, 0]], 
   StyleBox["\[IndentingNewLine]",
-   FontColor->RGBColor[1, 0, 0]], 
+   FontSize->10], 
   StyleBox[
    RowBox[{"(*", " ", 
     RowBox[{
@@ -166,23 +149,72 @@ Cell[BoxData[
       "crossovers"}]}], " ", "*)"}],
    FontSize->10], 
   StyleBox["\[IndentingNewLine]",
-   FontSize->10], 
+   FontColor->RGBColor[1, 0, 0]], 
+  RowBox[{
+   StyleBox[
+    StyleBox[
+     RowBox[{"(", "*"}]],
+    FontSize->10], 
+   StyleBox[" ",
+    FontSize->10], 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      StyleBox["Examples",
+       FontSize->10], 
+      StyleBox[":",
+       FontSize->10], 
+      StyleBox[" ",
+       FontSize->10], 
+      StyleBox["\[IndentingNewLine]",
+       FontSize->10], "NCO"}], "=", "295"}], ";", " ", 
+    RowBox[{"CO1", "=", "258"}], ";", " ", 
+    RowBox[{"CO2", "=", "34"}], ";", " ", 
+    RowBox[{"CO3", "=", "1"}], ";", " ", 
+    RowBox[{"CO4", "=", "0"}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"D", ".", "melanogaster"}], " ", "Autosomes"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"NCO", "=", "1015"}], ";", " ", 
+    RowBox[{"CO1", "=", "1013"}], ";", " ", 
+    RowBox[{"CO2", "=", "256"}], ";", " ", 
+    RowBox[{"CO3", "=", "32"}], ";", " ", 
+    RowBox[{"CO4", "=", "0"}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"D", ".", "santomea"}], " ", "Autosomes"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"NCO", "=", "2212"}], ";", " ", 
+    RowBox[{"CO1", "=", "2318"}], ";", " ", 
+    RowBox[{"CO2", "=", "432"}], ";", " ", 
+    RowBox[{"CO3", "=", "34"}], ";", " ", 
+    RowBox[{"CO4", "=", "1"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"D", ".", "yakuba"}], " ", "Autosomes"}], "*)"}], 
+   "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
   RowBox[{
    RowBox[{
-    RowBox[{"NCO", "=", "1812"}], ";", 
-    RowBox[{"CO1", "=", "2518"}], ";", 
-    RowBox[{"CO2", "=", "432"}], ";", 
-    RowBox[{"CO3", "=", "34"}], ";", 
-    RowBox[{"CO4", "=", "1"}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{"NCO", "=", "2212"}], ";", " ", 
+    RowBox[{"CO1", "=", "2318"}], ";", " ", 
+    RowBox[{"CO2", "=", "432"}], ";", " ", 
+    RowBox[{"CO3", "=", "34"}], ";", " ", 
+    RowBox[{"CO4", "=", "1"}], ";"}], 
+   StyleBox["\[IndentingNewLine]",
+    FontColor->RGBColor[1, 0, 0]], 
    StyleBox[
     RowBox[{
      RowBox[{"Bmin", "=", "0.01"}], ";", " ", 
      RowBox[{"Bmax", "=", "0.99"}], ";", " ", 
      RowBox[{"Bstep", "=", "0.01"}], ";"}],
     FontColor->GrayLevel[0]], 
-   StyleBox["\n",
-    FontColor->RGBColor[1, 0, 0]], 
    StyleBox["\[IndentingNewLine]",
+    FontColor->RGBColor[1, 0, 0]], 
+   RowBox[{
+    RowBox[{"TableFileName", "=", "\"\<B_vs_Er.tsv\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   StyleBox["\n",
     FontColor->RGBColor[1, 0, 0]], 
    StyleBox[
     RowBox[{
@@ -199,7 +231,9 @@ Cell[BoxData[
       FontSize->10], 
      StyleBox["*)",
       FontSize->10]}],
-    FontColor->RGBColor[1., 0., 0.]], "\[IndentingNewLine]", 
+    FontColor->RGBColor[1., 0., 0.]], 
+   StyleBox["\[IndentingNewLine]",
+    FontColor->GrayLevel[0]], 
    RowBox[{
     RowBox[{"SetOptions", "[", 
      RowBox[{
@@ -276,13 +310,13 @@ Cell[BoxData[
         RowBox[{
          RowBox[{"1", "/", "8"}], " ", "B", " ", "E4"}], "==", 
         RowBox[{"CO4", "/", "T"}]}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
-   "\[IndentingNewLine]", 
+   "\n", 
    StyleBox[
     RowBox[{"(*", 
      RowBox[{"===", " ", 
       RowBox[{"Solve", " ", "System", " ", "for", " ", "Each", " ", "B"}], 
       " ", "==="}], "*)"}],
-    FontSize->10], "\n", 
+    FontSize->10], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"results", "=", 
      RowBox[{"Table", "[", 
@@ -307,13 +341,13 @@ Cell[BoxData[
             RowBox[{"[", "1", "]"}], "]"}]}], ",", "Nothing"}], "]"}]}], ",", 
        RowBox[{"{", 
         RowBox[{"b", ",", "Bmin", ",", "Bmax", ",", "Bstep"}], "}"}]}], 
-      "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      "]"}]}], ";"}], "\[IndentingNewLine]", "\n", 
    StyleBox[
     RowBox[{"(*", 
      RowBox[{"===", " ", 
       RowBox[{"Prepare", " ", "for", " ", "Plot", " ", "and", " ", "Plot"}], 
       " ", "==="}], "*)"}],
-    FontSize->10], "\n", 
+    FontSize->10], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
      RowBox[{"{", 
@@ -385,28 +419,45 @@ Cell[BoxData[
    "\[IndentingNewLine]", "\[IndentingNewLine]", 
    StyleBox[
     RowBox[{"(*", " ", 
-     RowBox[{"===", " ", 
-      RowBox[{"Export", " ", "Table"}], " ", "==="}], "*)"}],
-    FontSize->10], "\[IndentingNewLine]", 
-   RowBox[{"Style", "[", 
-    RowBox[{"\"\<Saved file: E-values_vs_B.csv\>\"", ",", "Bold", ",", 
-     "Red"}], "]"}], "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"ExportPath", "=", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{"{", 
+     RowBox[{"===", 
+      RowBox[{"=", " ", 
        RowBox[{
-        RowBox[{"NotebookDirectory", "[", "]"}], 
-        ",", "\"\<E-values_vs_B.csv\>\""}], "}"}], "]"}]}], ";"}], "\n", 
-   RowBox[{"Export", "[", 
-    RowBox[{"ExportPath", ",", 
-     RowBox[{"Prepend", "[", 
-      RowBox[{"results", ",", 
+        RowBox[{
+         RowBox[{"Export", " ", "table"}], " ", "==="}], "="}]}]}], " ", 
+     "*)"}],
+    FontSize->10], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"DirOut", "=", 
+     RowBox[{"Quiet", "@", 
+      RowBox[{"Check", "[", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+        RowBox[{"Directory", "[", "]"}]}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"headers", "=", 
+     RowBox[{"{", 
+      RowBox[{"\"\<B\>\"", ",", "\"\<E0\>\"", ",", "\"\<E1\>\"", 
+       ",", "\"\<E2\>\"", ",", "\"\<E3\>\"", ",", "\"\<E4\>\""}], "}"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Export", "[", 
+     RowBox[{
+      RowBox[{"FileNameJoin", "[", 
        RowBox[{"{", 
-        RowBox[{"\"\<B\>\"", ",", "\"\<E0\>\"", ",", "\"\<E1\>\"", 
-         ",", "\"\<E2\>\"", ",", "\"\<E3\>\"", ",", "\"\<E4\>\""}], "}"}]}], 
-      "]"}]}], "]"}], "\n", 
-   RowBox[{"Quit", "[", "]"}], "\[IndentingNewLine]"}]}]], "Input",
+        RowBox[{"DirOut", ",", "TableFileName"}], "}"}], "]"}], ",", 
+      RowBox[{"Prepend", "[", 
+       RowBox[{"results", ",", "headers"}], "]"}], ",", "\"\<Table\>\""}], 
+     "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Table Saved to: \>\"", ",", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{"DirOut", ",", "TableFileName"}], "}"}], "]"}]}], "]"}], 
+    ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Beep", "[", "]"}], " ", 
+    RowBox[{"Quit", "[", "]"}]}], "\[IndentingNewLine]"}]}]], "Input",
  CellChangeTimes->{{3.962962384510807*^9, 3.9629623977927837`*^9}, {
    3.9629624955078297`*^9, 3.9629625619744225`*^9}, {3.9629625949020176`*^9, 
    3.9629626354558144`*^9}, {3.9629626763836327`*^9, 3.962962679211979*^9}, {
@@ -433,20 +484,20 @@ Cell[BoxData[
    3.963668214371935*^9}, 3.9637633984565506`*^9, {3.9637634438587837`*^9, 
    3.9637634464356384`*^9}, 3.9637635534921093`*^9, {3.963767994931221*^9, 
    3.9637679960193195`*^9}, {3.963768031867882*^9, 3.96376804615991*^9}, {
-   3.9637680769844055`*^9, 3.96376808539966*^9}, {3.963769086888727*^9, 
-   3.9637691086934032`*^9}, {3.9637691515651627`*^9, 3.963769152570692*^9}, {
-   3.9637691865017376`*^9, 3.9637692474166527`*^9}, {3.963769407802746*^9, 
-   3.963769412674469*^9}},
- CellLabel->"In[1]:=",ExpressionUUID->"694b1165-d229-ba43-947d-093a3fd56176"]
+   3.9637680769844055`*^9, 3.96376808539966*^9}, {3.9640341965836964`*^9, 
+   3.9640342055772667`*^9}, 3.964034273314459*^9, {3.9640343221904354`*^9, 
+   3.964034379976177*^9}, {3.964034486064186*^9, 3.9640345286826*^9}, {
+   3.96403469187047*^9, 3.9640346947401867`*^9}, {3.9640382187444973`*^9, 
+   3.964038224882509*^9}},ExpressionUUID->"80d8d0cd-ca06-2b46-938f-\
+3d054146b083"]
+}, Open  ]]
 },
-WindowSize->{945.375, 522.75},
+WindowSize->{950.25, 522.75},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
-TaggingRules-><|"TryRealOnly" -> False|>,
 ShowCellLabel->False,
-Magnification:>1.1 Inherited,
 FrontEndVersion->"14.2 for Microsoft Windows (64-bit) (March 14, 2025)",
 StyleDefinitions->"Default.nb",
-ExpressionUUID->"305234af-d37e-544a-8813-f76a2f34615d"
+ExpressionUUID->"583ca42f-ed9b-9143-a329-38d7ee8f0e89"
 ]
 (* End of Notebook Content *)
 
@@ -459,8 +510,11 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[554, 20, 5487, 107, 355, "Text",ExpressionUUID->"3cd4e7d6-86f7-874a-9418-aedcd74bc7da"],
-Cell[6044, 129, 12091, 310, 742, "Input",ExpressionUUID->"694b1165-d229-ba43-947d-093a3fd56176"]
+Cell[CellGroupData[{
+Cell[576, 22, 377, 7, 44, "Subtitle",ExpressionUUID->"3afb14cb-f5df-2f4c-b147-14e128072a26"],
+Cell[956, 31, 3524, 79, 250, "Subsubtitle",ExpressionUUID->"4cd1f10e-b4e1-e14e-945f-5af142cb5f4f"],
+Cell[4483, 112, 14256, 379, 808, "Input",ExpressionUUID->"80d8d0cd-ca06-2b46-938f-3d054146b083"]
+}, Open  ]]
 }
 ]
 *)
