@@ -8,7 +8,7 @@ High-resolution crossover maps in multiple Drosophila species
         D. melanogaster:
         - Comeron JM, Ratnappan R, Bailin S. The many landscapes of recombination in Drosophila melanogaster. PLoS Genet. 2012;8(10):e1002905. https://doi.org/10.1371/journal.pgen.1002905  PMID: 23071443
 
-Code to estimate tetrad (or bivalent) classes based on the observed frequency of crossover classes
+Code to estimate the frequency of tetrad (or bivalent) classes based on the observed frequency of crossover classes
 
         All code using Wolfram Mathematica (14,3) notebooks. Work under Creative Commons BY-NC-SA 4.0).
         Citation:
