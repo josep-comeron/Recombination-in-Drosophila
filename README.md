@@ -14,6 +14,5 @@ D. melanogaster:
 
 
 Code to estimate the frequency of tetrad (or bivalent) classes based on the observed frequency of crossover classes
-Citation:
 - Llopart A, Pettie N, Ryon A, Comeron JM (2025) A high-resolution crossover landscape in Drosophila santomea reveals rapid and concerted evolution of multiple properties of crossing over control. PLoS Genet. 2025;21(9):e1011885. https://doi.org/10.1371/journal.pgen.1011885 
         - Wolfram Research, Inc. Mathematica. Version 14.3. Wolfram Research, Inc., 2025.
