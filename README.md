@@ -1,6 +1,7 @@
 High-resolution crossover maps in multiple Drosophila species
 
 If you use any of the crossover maps, please cite us as following:
+
 D. santomea:
 - Llopart A, Pettie N, Ryon A, Comeron JM (2025) A high-resolution crossover landscape in Drosophila santomea reveals rapid and concerted evolution of multiple properties of crossing over control. PLoS Genet. 2025;21(9):e1011885. https://doi.org/10.1371/journal.pgen.1011885 
 
